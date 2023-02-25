@@ -34,7 +34,7 @@ def download_image(url, folder='images/'):
         file.write(response.content)
     return filepath
 
-"""
+
 for id in range(1, 11):
     try:
         download_url = f"https://tululu.org/txt.php?id={id}"
@@ -48,12 +48,20 @@ for id in range(1, 11):
         title = title_with_author.split('::')[0].strip()
         author = title_with_author.split('::')[1].strip()
 
+        comments = soup.find_all(class_='texts')
+
+        print(title)
+        print()
+        for comment in comments:
+            print(comment.find(class_='black').text)
+
         filename = f"{id}. {title}.txt"
         download_txt(download_url, filename)
     except requests.HTTPError:
         print('Book not found')
-"""
 
+
+"""
 for id in range(1, 11):
     try:
         book_url = f"https://tululu.org/b{id}/"
@@ -63,8 +71,9 @@ for id in range(1, 11):
 
         soup = BeautifulSoup(response.text, 'lxml')
         post_img_url = soup.find('div', class_='bookimage').find('img')['src']
-        absolute_img_url = urllib.parse.urljoin('https://tululu.org/',post_img_url)
+        absolute_img_url = urllib.parse.urljoin('https://tululu.org/', post_img_url)
         download_image(absolute_img_url)
 
     except requests.HTTPError:
         print('Book not found')
+"""
