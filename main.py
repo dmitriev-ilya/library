@@ -50,13 +50,15 @@ for id in range(1, 11):
 
         comments = soup.find_all(class_='texts')
 
-        print(title)
-        print()
-        for comment in comments:
-            print(comment.find(class_='black').text)
+        genres = soup.find('span', class_='d_book').find_all('a')
 
-        filename = f"{id}. {title}.txt"
-        download_txt(download_url, filename)
+        print(title)
+        print([genre.text for genre in genres])
+        #for comment in comments:
+        #    print(comment.find(class_='black').text)
+
+        #filename = f"{id}. {title}.txt"
+        #download_txt(download_url, filename)
     except requests.HTTPError:
         print('Book not found')
 
