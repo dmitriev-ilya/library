@@ -1,5 +1,6 @@
 import os
 import urllib
+import argparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -57,7 +58,24 @@ def parse_book_page(html_page):
 
 
 if __name__ == '__main__':
-    for id in range(1, 11):
+    parser = argparse.ArgumentParser(description='Скрипт для массового скачивания книг с сайта tululu.org/')
+    parser.add_argument(
+        "-s",
+        "--start_id",
+        help='id книги с которой начинается диапазон скачивания',
+        default=1,
+        type=int
+    )
+    parser.add_argument(
+        "-e",
+        "--end_id",
+        help='id книги которым заканичвается диапазон скачивания',
+        default=10,
+        type=int
+    )
+    args = parser.parse_args()
+
+    for id in range(args.start_id, args.end_id + 1):
         try:
             download_url = f"https://tululu.org/txt.php?id={id}"
             book_url = f"https://tululu.org/b{id}/"
@@ -71,7 +89,9 @@ if __name__ == '__main__':
             filename = f"{id}. {serialized_book_page['title']}.txt"
             download_txt(download_url, filename)
             download_image(serialized_book_page['book_img_url'])
-            
-            print(f"Downloaded: {serialized_book_page['title']} - {serialized_book_page['author']}")
+
+            print(f"Название: {serialized_book_page['title']}")
+            print(f"Автор: {serialized_book_page['author']}")
+            print()
         except requests.HTTPError:
             continue
