@@ -2,6 +2,7 @@ import os
 import sys
 import urllib
 import argparse
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -84,17 +85,23 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     for book_id in range(args.start_id, args.end_id + 1):
-        try:
-            book_url = f"https://tululu.org/b{book_id}/"
-            parsed_book_page = parse_book_page(book_url)
+        active_loop = True
+        while active_loop:
+            try:
+                book_url = f"https://tululu.org/b{book_id}/"
+                parsed_book_page = parse_book_page(book_url)
 
-            filename = f"{book_id}. {parsed_book_page['title']}.txt"
-            download_txt(book_id, filename)
-            download_image(parsed_book_page['book_img_url'])
+                filename = f"{book_id}. {parsed_book_page['title']}.txt"
+                download_txt(book_id, filename)
+                download_image(parsed_book_page['book_img_url'])
 
-            print(f"Название: {parsed_book_page['title']}")
-            print(f"Автор: {parsed_book_page['author']}")
-            print()
-        except requests.HTTPError:
-            sys.stderr.write(f'A book with ID {book_id} does not exist \n \n')
-            continue
+                print(f"Название: {parsed_book_page['title']}")
+                print(f"Автор: {parsed_book_page['author']}")
+                print()
+                active_loop = False
+            except requests.HTTPError:
+                sys.stderr.write(f'A book with ID {book_id} does not exist \n\n')
+                active_loop = False
+            except requests.exceptions.ConnectionError:
+                sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
+                time.sleep(2)
