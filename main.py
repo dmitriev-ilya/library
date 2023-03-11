@@ -1,4 +1,5 @@
 import os
+import sys
 import urllib
 import argparse
 
@@ -95,4 +96,5 @@ if __name__ == '__main__':
             print(f"Автор: {parsed_book_page['author']}")
             print()
         except requests.HTTPError:
+            sys.stderr.write(f'A book with ID {book_id} does not exist \n \n')
             continue
