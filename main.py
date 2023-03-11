@@ -39,14 +39,20 @@ def download_image(url, folder='images/'):
     return filepath
 
 
-def parse_book_page(html_page):
+def parse_book_page(book_url):
+    response = requests.get(book_url)
+    response.raise_for_status()
+    check_for_redirect(response)
+
+    html_page = BeautifulSoup(response.text, 'lxml')
+
     title, author = html_page.find('table').find('h1').text.split('::')
 
     comments = html_page.find_all(class_='texts')
     genres = html_page.find('span', class_='d_book').find_all('a')
 
     book_img_url = html_page.find('div', class_='bookimage').find('img')['src']
-    absolute_img_url = urllib.parse.urljoin('https://tululu.org/', book_img_url)
+    absolute_img_url = urllib.parse.urljoin(response.url, book_img_url)
 
     parsed_book_page = {
         'title': title.strip(),
@@ -79,12 +85,7 @@ if __name__ == '__main__':
     for book_id in range(args.start_id, args.end_id + 1):
         try:
             book_url = f"https://tululu.org/b{book_id}/"
-            response = requests.get(book_url)
-            response.raise_for_status()
-            check_for_redirect(response)
-
-            html_page = BeautifulSoup(response.text, 'lxml')
-            parsed_book_page = parse_book_page(html_page)
+            parsed_book_page = parse_book_page(book_url)
 
             filename = f"{book_id}. {parsed_book_page['title']}.txt"
             download_txt(book_id, filename)
