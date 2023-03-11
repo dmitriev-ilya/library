@@ -12,8 +12,10 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def download_txt(url, filename, folder='books/'):
-    response = requests.get(url)
+def download_txt(book_id, filename, folder='books/'):
+    download_url = "https://tululu.org/txt.php"
+    params = {'id': book_id}
+    response = requests.get(download_url, params=params)
     response.raise_for_status()
     check_for_redirect(response)
 
@@ -75,10 +77,9 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    for id in range(args.start_id, args.end_id + 1):
+    for book_id in range(args.start_id, args.end_id + 1):
         try:
-            download_url = f"https://tululu.org/txt.php?id={id}"
-            book_url = f"https://tululu.org/b{id}/"
+            book_url = f"https://tululu.org/b{book_id}/"
             response = requests.get(book_url)
             response.raise_for_status()
             check_for_redirect(response)
@@ -86,8 +87,8 @@ if __name__ == '__main__':
             html_page = BeautifulSoup(response.text, 'lxml')
             serialized_book_page = parse_book_page(html_page)
 
-            filename = f"{id}. {serialized_book_page['title']}.txt"
-            download_txt(download_url, filename)
+            filename = f"{book_id}. {serialized_book_page['title']}.txt"
+            download_txt(book_id, filename)
             download_image(serialized_book_page['book_img_url'])
 
             print(f"Название: {serialized_book_page['title']}")
