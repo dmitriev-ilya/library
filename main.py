@@ -40,9 +40,8 @@ def download_image(url, folder='images/'):
 
 
 def parse_book_page(html_page):
-    title_with_author = html_page.find('table').find('h1').text
-    title = title_with_author.split('::')[0].strip()
-    author = title_with_author.split('::')[1].strip()
+    title, author = html_page.find('table').find('h1').text.split('::')
+
     comments = html_page.find_all(class_='texts')
     genres = html_page.find('span', class_='d_book').find_all('a')
 
@@ -50,8 +49,8 @@ def parse_book_page(html_page):
     absolute_img_url = urllib.parse.urljoin('https://tululu.org/', book_img_url)
 
     parsed_book_page = {
-        'title': title,
-        'author': author,
+        'title': title.strip(),
+        'author': author.strip(),
         'comments': [comment.find(class_='black').text for comment in comments],
         'genres': [genre.text for genre in genres],
         'book_img_url': absolute_img_url
