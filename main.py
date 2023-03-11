@@ -49,14 +49,14 @@ def parse_book_page(html_page):
     book_img_url = html_page.find('div', class_='bookimage').find('img')['src']
     absolute_img_url = urllib.parse.urljoin('https://tululu.org/', book_img_url)
 
-    serialized_book_page = {
+    parsed_book_page = {
         'title': title,
         'author': author,
         'comments': [comment.find(class_='black').text for comment in comments],
         'genres': [genre.text for genre in genres],
         'book_img_url': absolute_img_url
     }
-    return serialized_book_page
+    return parsed_book_page
 
 
 if __name__ == '__main__':
@@ -85,14 +85,14 @@ if __name__ == '__main__':
             check_for_redirect(response)
 
             html_page = BeautifulSoup(response.text, 'lxml')
-            serialized_book_page = parse_book_page(html_page)
+            parsed_book_page = parse_book_page(html_page)
 
-            filename = f"{book_id}. {serialized_book_page['title']}.txt"
+            filename = f"{book_id}. {parsed_book_page['title']}.txt"
             download_txt(book_id, filename)
-            download_image(serialized_book_page['book_img_url'])
+            download_image(parsed_book_page['book_img_url'])
 
-            print(f"Название: {serialized_book_page['title']}")
-            print(f"Автор: {serialized_book_page['author']}")
+            print(f"Название: {parsed_book_page['title']}")
+            print(f"Автор: {parsed_book_page['author']}")
             print()
         except requests.HTTPError:
             continue
