@@ -14,12 +14,18 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
+def get_response(url, params=None):
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    check_for_redirect(response)
+    return response
+
+
 def download_txt(book_id, filename, folder='books/'):
     download_url = "https://tululu.org/txt.php"
     params = {'id': book_id}
-    response = requests.get(download_url, params=params)
-    response.raise_for_status()
-    check_for_redirect(response)
+
+    response = get_response(download_url, params)
 
     os.makedirs(folder, exist_ok=True)
     filepath = os.path.join(folder, sanitize_filename(filename))
@@ -29,9 +35,7 @@ def download_txt(book_id, filename, folder='books/'):
 
 
 def download_image(url, folder='images/'):
-    response = requests.get(url)
-    response.raise_for_status()
-    check_for_redirect(response)
+    response = get_response(url)
 
     os.makedirs(folder, exist_ok=True)
     filename = urllib.parse.urlsplit(url)[2].split('/')[-1]
@@ -42,9 +46,7 @@ def download_image(url, folder='images/'):
 
 
 def parse_book_page(book_url):
-    response = requests.get(book_url)
-    response.raise_for_status()
-    check_for_redirect(response)
+    response = get_response(book_url)
 
     html_page = BeautifulSoup(response.text, 'lxml')
 
