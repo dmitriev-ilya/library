@@ -45,10 +45,8 @@ def download_image(url, folder='images/'):
     return filepath
 
 
-def parse_book_page(book_url):
-    response = get_response(book_url)
-
-    html_page = BeautifulSoup(response.text, 'lxml')
+def parse_book_page(book_page_response):
+    html_page = BeautifulSoup(book_page_response.text, 'lxml')
 
     title, author = html_page.find('table').find('h1').text.split('::')
 
@@ -56,7 +54,7 @@ def parse_book_page(book_url):
     genres = html_page.find('span', class_='d_book').find_all('a')
 
     book_img_url = html_page.find('div', class_='bookimage').find('img')['src']
-    absolute_img_url = urllib.parse.urljoin(response.url, book_img_url)
+    absolute_img_url = urllib.parse.urljoin(book_page_response.url, book_img_url)
 
     parsed_book_page = {
         'title': title.strip(),
@@ -91,7 +89,8 @@ if __name__ == '__main__':
         while active_loop:
             try:
                 book_url = f"https://tululu.org/b{book_id}/"
-                parsed_book_page = parse_book_page(book_url)
+                book_page_response = get_response(book_url)
+                parsed_book_page = parse_book_page(book_page_response)
 
                 filename = f"{book_id}. {parsed_book_page['title']}.txt"
                 download_txt(book_id, filename)
