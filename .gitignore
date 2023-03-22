@@ -2,3 +2,5 @@ venv/
 books/
 bs4_tutorial.py
 images/
+*.json
+*.pyc
