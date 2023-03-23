@@ -18,9 +18,9 @@ def parse_scince_fiction_books_url(start_page, end_page):
         category_page_response.raise_for_status()
 
         html_page = BeautifulSoup(category_page_response.text, 'lxml')
-        books = html_page.find_all('table', class_='d_book')
+        books = html_page.select('.d_book')
         for book in books:
-            book_id = book.find('a')['href']
+            book_id = book.select_one('a')['href']
             absolute_book_url = urllib.parse.urljoin(category_page_response.url, book_id)
             scince_fiction_books_url.append(absolute_book_url)
     return scince_fiction_books_url

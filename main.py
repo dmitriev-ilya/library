@@ -48,18 +48,18 @@ def download_image(url, folder='images/'):
 def parse_book_page(book_page_response):
     html_page = BeautifulSoup(book_page_response.text, 'lxml')
 
-    title, author = html_page.find('table').find('h1').text.split('::')
+    title, author = html_page.select_one('table h1').text.split('::')
 
-    comments = html_page.find_all(class_='texts')
-    genres = html_page.find('span', class_='d_book').find_all('a')
+    comments = html_page.select('.texts .black')
+    genres = html_page.select('span.d_book a')
 
-    book_img_url = html_page.find('div', class_='bookimage').find('img')['src']
+    book_img_url = html_page.select_one('.bookimage img')['src']
     absolute_img_url = urllib.parse.urljoin(book_page_response.url, book_img_url)
 
     parsed_book_page = {
         'title': title.strip(),
         'author': author.strip(),
-        'comments': [comment.find(class_='black').text for comment in comments],
+        'comments': [comment.text for comment in comments],
         'genres': [genre.text for genre in genres],
         'book_img_url': absolute_img_url
     }
