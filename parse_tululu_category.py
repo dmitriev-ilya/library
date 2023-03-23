@@ -3,6 +3,7 @@ import argparse
 import sys
 import time
 import json
+import os
 
 import requests
 from bs4 import BeautifulSoup
@@ -58,6 +59,31 @@ if __name__ == '__main__':
         default=pages_amount,
         type=int
     )
+    parser.add_argument(
+        "-s_i",
+        "--skip_imgs",
+        help='не скачивать картинки',
+        action='store_true'
+    )
+    parser.add_argument(
+        "-s_t",
+        "--skip_txt",
+        help='не скачивать текст книг',
+        action='store_true'
+    )
+    parser.add_argument(
+        "-j",
+        "--json_path",
+        help='путь к файлу .json для записи информации о книгах',
+        default="books.json",
+        type=str
+    )
+    parser.add_argument(
+        "-f",
+        "--dest_folder",
+        help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
+        action='store_true'
+    )
     args = parser.parse_args()
 
     scince_fiction_books_url = parse_scince_fiction_books_url(args.start_page, args.end_page)
@@ -73,8 +99,14 @@ if __name__ == '__main__':
                 book_id = extract_book_id_from_url(book_url)
 
                 filename = f"{number}-я книга. {parsed_book_page['title']}.txt"
-                book_path = download_txt(book_id, filename)
-                image_path = download_image(parsed_book_page['book_img_url'])
+                if args.skip_txt:
+                    book_path = 'the path is missing'
+                else:
+                    book_path = download_txt(book_id, filename)
+                if args.skip_imgs:
+                    image_path = 'the path is missing'
+                else:
+                    image_path = download_image(parsed_book_page['book_img_url'])
                 title = parsed_book_page['title']
                 author = parsed_book_page['author']
 
@@ -101,5 +133,8 @@ if __name__ == '__main__':
                 time.sleep(2)
 
     books_json = json.dumps(books, ensure_ascii=False)
-    with open("books.json", "w", encoding='utf8') as file:
+    with open(args.json_path, "w", encoding='utf8') as file:
         file.write(books_json)
+
+    if args.dest_folder:
+        print(os.getcwd())
