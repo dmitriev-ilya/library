@@ -33,19 +33,29 @@ def extract_book_id_from_url(book_url):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Скрипт для постраничного парсинга URL-адресов книг в категории научной фантастики сайта tululu.org/')
+    category_url = f"https://tululu.org/l55/"
+    category_response = requests.get(category_url)
+    category_response.raise_for_status()
+
+    html_category_page = BeautifulSoup(category_response.text, 'lxml')
+    pages_amount = html_category_page.select('.npage')[-1].text
+
+    parser = argparse.ArgumentParser(
+        description='Скрипт для постраничного парсинга URL-адресов книг \
+         в категории научной фантастики сайта tululu.org/'
+    )
     parser.add_argument(
         "-s",
         "--start_page",
-        help='номер страницы сайта с которой начинается парсинг',
+        help='номер страницы сайта с которой начинается парсинг, по умолчанию - 1',
         default=1,
         type=int
     )
     parser.add_argument(
         "-e",
         "--end_page",
-        help='номер страницы сайта на которой заканчивается парсинг',
-        default=4,
+        help='номер страницы сайта на которой заканчивается парсинг, \ по умолчанию - все оставшиеся страницы',
+        default=pages_amount,
         type=int
     )
     args = parser.parse_args()
