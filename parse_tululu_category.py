@@ -11,8 +11,8 @@ from bs4 import BeautifulSoup
 from main import get_response, parse_book_page, download_txt, download_image
 
 
-def parse_scince_fiction_books_url(start_page, end_page):
-    scince_fiction_books_url = []
+def parse_scince_fiction_book_urls(start_page, end_page):
+    scince_fiction_book_urls = []
     for page_number in range(start_page, end_page + 1):
         active_loop = True
         while active_loop:
@@ -25,7 +25,7 @@ def parse_scince_fiction_books_url(start_page, end_page):
                 for book in books:
                     book_id = book.select_one('a')['href']
                     absolute_book_url = urllib.parse.urljoin(category_page_response.url, book_id)
-                    scince_fiction_books_url.append(absolute_book_url)
+                    scince_fiction_book_urls.append(absolute_book_url)
                 active_loop = False
             except requests.HTTPError:
                 sys.stderr.write(f'A page number {page_number} does not exist \n\n')
@@ -33,7 +33,7 @@ def parse_scince_fiction_books_url(start_page, end_page):
             except requests.exceptions.ConnectionError:
                 sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
                 time.sleep(2)
-    return scince_fiction_books_url
+    return scince_fiction_book_urls
 
 
 def extract_book_id_from_url(book_url):
@@ -100,10 +100,10 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    scince_fiction_books_url = parse_scince_fiction_books_url(args.start_page, args.end_page)
+    scince_fiction_book_urls = parse_scince_fiction_book_urls(args.start_page, args.end_page)
     books = []
 
-    for number, book_url in enumerate(scince_fiction_books_url, start=1):
+    for number, book_url in enumerate(scince_fiction_book_urls, start=1):
         active_loop = True
         while active_loop:
             try:
