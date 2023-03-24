@@ -33,13 +33,18 @@ def extract_book_id_from_url(book_url):
     return book_id
 
 
-if __name__ == '__main__':
-    category_url = f"https://tululu.org/l55/"
+def get_category_pages_amount(category_url):
     category_response = requests.get(category_url)
     category_response.raise_for_status()
 
     html_category_page = BeautifulSoup(category_response.text, 'lxml')
     pages_amount = html_category_page.select('.npage')[-1].text
+    return int(pages_amount)
+
+
+if __name__ == '__main__':
+    category_url = "https://tululu.org/l55/"
+    pages_amount = get_category_pages_amount(category_url)
 
     parser = argparse.ArgumentParser(
         description='Скрипт для постраничного парсинга URL-адресов книг \
