@@ -15,8 +15,7 @@ def parse_scince_fiction_books_url(start_page, end_page):
     scince_fiction_books_url = []
     for page_number in range(start_page, end_page + 1):
         category_page_url = f"https://tululu.org/l55/{page_number}/"
-        category_page_response = requests.get(category_page_url)
-        category_page_response.raise_for_status()
+        category_page_response = get_response(category_page_url)
 
         html_page = BeautifulSoup(category_page_response.text, 'lxml')
         books = html_page.select('.d_book')
