@@ -14,15 +14,25 @@ from main import get_response, parse_book_page, download_txt, download_image
 def parse_scince_fiction_books_url(start_page, end_page):
     scince_fiction_books_url = []
     for page_number in range(start_page, end_page + 1):
-        category_page_url = f"https://tululu.org/l55/{page_number}/"
-        category_page_response = get_response(category_page_url)
+        active_loop = True
+        while active_loop:
+            try:
+                category_page_url = f"https://tululu.org/l55/{page_number}/"
+                category_page_response = get_response(category_page_url)
 
-        html_page = BeautifulSoup(category_page_response.text, 'lxml')
-        books = html_page.select('.d_book')
-        for book in books:
-            book_id = book.select_one('a')['href']
-            absolute_book_url = urllib.parse.urljoin(category_page_response.url, book_id)
-            scince_fiction_books_url.append(absolute_book_url)
+                html_page = BeautifulSoup(category_page_response.text, 'lxml')
+                books = html_page.select('.d_book')
+                for book in books:
+                    book_id = book.select_one('a')['href']
+                    absolute_book_url = urllib.parse.urljoin(category_page_response.url, book_id)
+                    scince_fiction_books_url.append(absolute_book_url)
+                active_loop = False
+            except requests.HTTPError:
+                sys.stderr.write(f'A page number {page_number} does not exist \n\n')
+                active_loop = False
+            except requests.exceptions.ConnectionError:
+                sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
+                time.sleep(2)
     return scince_fiction_books_url
 
 
