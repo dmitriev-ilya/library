@@ -96,9 +96,13 @@ if __name__ == '__main__':
         "-f",
         "--dest_folder",
         help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
-        action='store_true'
+        default="",
+        type=str
     )
     args = parser.parse_args()
+
+    images_folder = os.path.join(args.dest_folder, 'images')
+    books_folder = os.path.join(args.dest_folder, 'books')
 
     scince_fiction_book_urls = parse_scince_fiction_book_urls(args.start_page, args.end_page)
     books = []
@@ -116,11 +120,11 @@ if __name__ == '__main__':
                 if args.skip_txt:
                     book_path = 'the path is missing'
                 else:
-                    book_path = download_txt(book_id, filename)
+                    book_path = download_txt(book_id, filename, books_folder)
                 if args.skip_imgs:
                     image_path = 'the path is missing'
                 else:
-                    image_path = download_image(parsed_book_page['book_img_url'])
+                    image_path = download_image(parsed_book_page['book_img_url'], images_folder)
                 title = parsed_book_page['title']
                 author = parsed_book_page['author']
 
@@ -146,8 +150,7 @@ if __name__ == '__main__':
                 sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
                 time.sleep(2)
 
-    with open(args.json_path, "w", encoding='utf8') as file:
-        json.dump(books, file, ensure_ascii=False)
+    json_path = os.path.join(args.dest_folder, args.json_path)
 
-    if args.dest_folder:
-        print(os.getcwd())
+    with open(json_path, "w", encoding='utf8') as file:
+        json.dump(books, file, ensure_ascii=False)
