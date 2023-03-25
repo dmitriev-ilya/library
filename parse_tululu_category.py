@@ -146,9 +146,8 @@ if __name__ == '__main__':
                 sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
                 time.sleep(2)
 
-    books_json = json.dumps(books, ensure_ascii=False)
     with open(args.json_path, "w", encoding='utf8') as file:
-        file.write(books_json)
+        json.dump(books, file, ensure_ascii=False)
 
     if args.dest_folder:
         print(os.getcwd())
