@@ -26,7 +26,7 @@
                         <div class="card-body">
                           <h5 class="card-title">{{ first_book.title }}</h5>
                           <p class="card-text">{{ first_book.author }}</p>
-                          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                          <p class="card-text"><a href="{{ first_book.book_path|urlencode }}" target="_blank">Читать</a></p>
                         </div>
                       </div>
                   </div>
@@ -42,7 +42,7 @@
                         <div class="card-body">
                           <h5 class="card-title">{{ second_book.title }}</h5>
                           <p class="card-text">{{ second_book.author }}</p>
-                          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                          <p class="card-text"><a href="{{ second_book.book_path|urlencode }}" target="_blank">Читать</a></p>
                         </div>
                       </div>
                   </div>
@@ -65,7 +65,7 @@
                       <div class="card-body">
                         <h5 class="card-title">{{ book.title }}</h5>
                         <p class="card-text">{{ book.author }}</p>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <p class="card-text"><a href="{{ book.book_path|urlencode }}" target="_blank">Читать</a></p>
                       </div>
                     </div>
                 </div>
