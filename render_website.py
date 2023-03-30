@@ -19,13 +19,18 @@ books_by_pages = list(chunked(books, 10))
 
 def render_template(books_by_pages, pages_path='pages'):
     os.makedirs(pages_path, exist_ok=True)
-
+    pages_number_range = list(range(1, len(books_by_pages) + 1))
     for page_number, books_on_page in enumerate(books_by_pages, start=1):
         books_on_couples = list(chunked(books_on_page, 2))
         template = env.get_template('template.html')
-        rendered_page = template.render(books_on_couples=books_on_couples)
-        filepath = os.path.join(pages_path, f'index{page_number}.html')
-        with open(filepath, 'w', encoding="utf8") as file:
+        index_filepath = os.path.join(pages_path, f'index{page_number}.html')
+
+        rendered_page = template.render(
+            books_on_couples=books_on_couples,
+            pages_number_range=pages_number_range,
+            current_page=page_number
+        )
+        with open(index_filepath, 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
