@@ -53,7 +53,10 @@
                         <div class="card-body">
                           <h5 class="card-title">{{ first_book.title }}</h5>
                           <p class="card-text">{{ first_book.author }}</p>
-                          <p class="card-text"><a href="../{{ first_book.book_path|urlencode }}" target="_blank">Читать</a></p>
+                          {% for genre in first_book.genres %}
+                            <span class="badge badge-light">{{ genre }}</span>
+                          {% endfor %}
+                          <p class="card-text mt-3"><a href="../{{ first_book.book_path|urlencode }}" target="_blank">Читать</a></p>
                         </div>
                       </div>
                   </div>
@@ -69,7 +72,10 @@
                         <div class="card-body">
                           <h5 class="card-title">{{ second_book.title }}</h5>
                           <p class="card-text">{{ second_book.author }}</p>
-                          <p class="card-text"><a href="../{{ second_book.book_path|urlencode }}" target="_blank">Читать</a></p>
+                          {% for genre in second_book.genres %}
+                            <span class="badge badge-light">{{ genre }}</span>
+                          {% endfor %}
+                          <p class="card-text mt-3"><a href="../{{ second_book.book_path|urlencode }}" target="_blank">Читать</a></p>
                         </div>
                       </div>
                   </div>
@@ -92,7 +98,10 @@
                       <div class="card-body">
                         <h5 class="card-title">{{ book.title }}</h5>
                         <p class="card-text">{{ book.author }}</p>
-                        <p class="card-text"><a href="../{{ book.book_path|urlencode }}" target="_blank">Читать</a></p>
+                        {% for genre in book.genres %}
+                          <span class="badge badge-light">{{ genre }}</span>
+                        {% endfor %}
+                        <p class="card-text mt-3"><a href="../{{ book.book_path|urlencode }}" target="_blank">Читать</a></p>
                       </div>
                     </div>
                 </div>
