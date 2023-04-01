@@ -17,7 +17,8 @@ books = json.loads(books_json)
 books_by_pages = list(chunked(books, 10))
 
 
-def render_template(books_by_pages, pages_path='pages'):
+def render_template(books_by_pages):
+    pages_path = 'pages'
     os.makedirs(pages_path, exist_ok=True)
     pages_number_range = list(range(1, len(books_by_pages) + 1))
     for page_number, books_on_page in enumerate(books_by_pages, start=1):
@@ -43,4 +44,4 @@ on_reload()
 
 server = Server()
 server.watch('template.html', on_reload)
-server.serve(root='.')
+server.serve(root='.', default_filename='pages/index1.html')
