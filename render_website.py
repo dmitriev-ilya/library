@@ -34,9 +34,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     with open(args.json_path, 'r') as file:
-        books_json = file.read()
+        books = json.load(file)
 
-    books = json.loads(books_json)
     books_by_pages = list(chunked(books, 10))
 
     def render_template(books_by_pages, pages_path=args.pages_path):
