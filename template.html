@@ -38,7 +38,7 @@
         {% endif %}
       </ul>
     </nav>
-    {% for books_pair in books_on_couples %}
+    {% for books_pair in books_description_on_couples %}
       {% if books_pair|length > 1 %}
         {% for first_book, second_book in books_pair|batch(2) %}
           <div class="container">
