@@ -58,7 +58,6 @@ if __name__ == '__main__':
 
     def on_reload():
         render_template(books_description_by_pages)
-        print('Site rebuilted')
 
     on_reload()
 
