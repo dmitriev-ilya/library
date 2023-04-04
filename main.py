@@ -22,7 +22,7 @@ def get_response(url, params=None):
 
 
 def download_txt(book_id, filename, folder='books/'):
-    download_url = "https://tululu.org/txt.php"
+    download_url = 'https://tululu.org/txt.php'
     params = {'id': book_id}
 
     response = get_response(download_url, params)
@@ -69,15 +69,15 @@ def parse_book_page(book_page_response):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Скрипт для массового скачивания книг с сайта tululu.org/')
     parser.add_argument(
-        "-s",
-        "--start_id",
+        '-s',
+        '--start_id',
         help='id книги с которой начинается диапазон скачивания',
         default=1,
         type=int
     )
     parser.add_argument(
-        "-e",
-        "--end_id",
+        '-e',
+        '--end_id',
         help='id книги которым заканичвается диапазон скачивания',
         default=10,
         type=int
@@ -88,7 +88,7 @@ if __name__ == '__main__':
         active_loop = True
         while active_loop:
             try:
-                book_url = f"https://tululu.org/b{book_id}/"
+                book_url = f'https://tululu.org/b{book_id}/'
                 book_page_response = get_response(book_url)
                 parsed_book_page = parse_book_page(book_page_response)
 
@@ -104,5 +104,5 @@ if __name__ == '__main__':
                 sys.stderr.write(f'A book with ID {book_id} does not exist \n\n')
                 active_loop = False
             except requests.exceptions.ConnectionError:
-                sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
+                sys.stderr.write('Connection lost. Trying to reconnecting \n\n')
                 time.sleep(2)

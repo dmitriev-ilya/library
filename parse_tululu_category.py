@@ -17,7 +17,7 @@ def parse_scince_fiction_book_urls(start_page, end_page):
         active_loop = True
         while active_loop:
             try:
-                category_page_url = f"https://tululu.org/l55/{page_number}/"
+                category_page_url = f'https://tululu.org/l55/{page_number}/'
                 category_page_response = get_response(category_page_url)
 
                 html_page = BeautifulSoup(category_page_response.text, 'lxml')
@@ -31,7 +31,7 @@ def parse_scince_fiction_book_urls(start_page, end_page):
                 sys.stderr.write(f'A page number {page_number} does not exist \n\n')
                 active_loop = False
             except requests.exceptions.ConnectionError:
-                sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
+                sys.stderr.write('Connection lost. Trying to reconnecting \n\n')
                 time.sleep(2)
     return scince_fiction_book_urls
 
@@ -52,7 +52,7 @@ def get_category_pages_amount(category_url):
 
 
 if __name__ == '__main__':
-    category_url = "https://tululu.org/l55/"
+    category_url = 'https://tululu.org/l55/'
     pages_amount = get_category_pages_amount(category_url)
 
     parser = argparse.ArgumentParser(
@@ -60,43 +60,43 @@ if __name__ == '__main__':
          в категории научной фантастики сайта tululu.org/'
     )
     parser.add_argument(
-        "-s",
-        "--start_page",
+        '-s',
+        '--start_page',
         help='номер страницы сайта с которой начинается парсинг, по умолчанию - 1',
         default=1,
         type=int
     )
     parser.add_argument(
-        "-e",
-        "--end_page",
+        '-e',
+        '--end_page',
         help='номер страницы сайта на которой заканчивается парсинг, по умолчанию - все оставшиеся страницы',
         default=pages_amount,
         type=int
     )
     parser.add_argument(
-        "-s_i",
-        "--skip_imgs",
+        '-s_i',
+        '--skip_imgs',
         help='не скачивать картинки',
         action='store_true'
     )
     parser.add_argument(
-        "-s_t",
-        "--skip_txt",
+        '-s_t',
+        '--skip_txt',
         help='не скачивать текст книг',
         action='store_true'
     )
     parser.add_argument(
-        "-j",
-        "--json_path",
+        '-j',
+        '--json_path',
         help='путь к файлу .json для записи информации о книгах',
-        default="books.json",
+        default='books.json',
         type=str
     )
     parser.add_argument(
-        "-f",
-        "--dest_folder",
+        '-f',
+        '--dest_folder',
         help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
-        default="media",
+        default='media',
         type=str
     )
     args = parser.parse_args()
@@ -128,8 +128,8 @@ if __name__ == '__main__':
                 title = parsed_book_page['title']
                 author = parsed_book_page['author']
 
-                print(f"Название: {title}")
-                print(f"Автор: {author}")
+                print(f'Название: {title}')
+                print(f'Автор: {author}')
                 print()
 
                 book_card = {
@@ -147,10 +147,10 @@ if __name__ == '__main__':
                 sys.stderr.write(f'A book with ID {book_id} does not exist \n\n')
                 active_loop = False
             except requests.exceptions.ConnectionError:
-                sys.stderr.write("Connection lost. Trying to reconnecting \n\n")
+                sys.stderr.write('Connection lost. Trying to reconnecting \n\n')
                 time.sleep(2)
 
     json_path = os.path.join(args.dest_folder, args.json_path)
 
-    with open(json_path, "w", encoding='utf8') as file:
+    with open(json_path, 'w', encoding='utf8') as file:
         json.dump(books, file, ensure_ascii=False)
