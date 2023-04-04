@@ -96,7 +96,7 @@ if __name__ == '__main__':
         "-f",
         "--dest_folder",
         help='путь к каталогу с результатами парсинга: картинкам, книгам, JSON',
-        default="",
+        default="media",
         type=str
     )
     args = parser.parse_args()

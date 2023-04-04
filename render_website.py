@@ -10,7 +10,7 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
-with open("books.json", "r") as file:
+with open('media/books.json', 'r') as file:
     books_json = file.read()
 
 books = json.loads(books_json)
@@ -37,7 +37,7 @@ def render_template(books_by_pages):
 
 def on_reload():
     render_template(books_by_pages)
-    print("Site rebuilted")
+    print('Site rebuilted')
 
 
 on_reload()
