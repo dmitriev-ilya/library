@@ -46,14 +46,14 @@ if __name__ == '__main__':
             books_description_at_level = 2
             books_description_on_couples = list(chunked(books_on_page, books_description_at_level))
             template = env.get_template('template.html')
-            index_filepath = os.path.join(pages_path, f'index{page_number}.html')
+            index_page_filepath = os.path.join(pages_path, f'index{page_number}.html')
 
             rendered_page = template.render(
                 books_description_on_couples=books_description_on_couples,
                 pages_number_range=pages_number_range,
                 current_page=page_number
             )
-            with open(index_filepath, 'w', encoding='utf8') as file:
+            with open(index_page_filepath, 'w', encoding='utf8') as file:
                 file.write(rendered_page)
 
     def on_reload():
