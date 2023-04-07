@@ -4,7 +4,7 @@
 
 Рабочая версия сайта из репозитория по [ссылке](https://dmitriev-ilya.github.io/library/pages/index1.html).
 
-![image](https://user-images.githubusercontent.com/67222917/229307066-98cb5454-98c8-4545-9429-ef1f2be45447.png)
+![image](https://user-images.githubusercontent.com/67222917/230637892-00066c56-61e9-4d32-8d24-651a714b4829.png)
 
 
 ## Как установить
