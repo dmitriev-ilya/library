@@ -36,13 +36,13 @@ if __name__ == '__main__':
     with open(args.json_path, 'r') as file:
         books_description = json.load(file)
 
-    books_description_per_page = 10
-    books_description_by_pages = list(chunked(books_description, books_description_per_page))
+    book_descriptions_per_page = 10
+    book_descriptions_by_pages = list(chunked(books_description, book_descriptions_per_page))
 
-    def render_template(books_description_by_pages, pages_path=args.pages_path):
+    def render_template(book_descriptions_by_pages, pages_path=args.pages_path):
         os.makedirs(pages_path, exist_ok=True)
-        pages_number_range = list(range(1, len(books_description_by_pages) + 1))
-        for page_number, books_on_page in enumerate(books_description_by_pages, start=1):
+        pages_number_range = list(range(1, len(book_descriptions_by_pages) + 1))
+        for page_number, books_on_page in enumerate(book_descriptions_by_pages, start=1):
             books_description_at_level = 2
             books_description_on_couples = list(chunked(books_on_page, books_description_at_level))
             template = env.get_template('template.html')
@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 file.write(rendered_page)
 
     def on_reload():
-        render_template(books_description_by_pages)
+        render_template(book_descriptions_by_pages)
 
     on_reload()
 
